@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CarritoCompras</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/WebCarritoComprasAda.styles.css" asp-append-version="true" /> *@
+    <link href="~..\..\..\Views/Shared/_layout.cshtml.css" rel="stylesheet" asp-append-version="true" />
+   
+    <!-- Agregar Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <!-- Navbar Mejorado -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid">
+            <!-- Logo o Nombre de la Empresa -->
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-store me-2"></i>CarritoCompras
+            </a>
+
+            <!-- Botón para Menú en Dispositivos Móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Contenido del Navbar -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Menú de Navegación -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Producto" asp-action="Index">
+                            <i class="fas fa-box-open me-1"></i>Productos
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cog me-1"></i>Opciones
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href=""><i class="fas fa-user me-1"></i>Mi Perfil</a></li>
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="Producto" asp-action="Create">
+                                    <i class="fa-solid fa-plus"></i> Agregar Producto
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href=""><i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Botón de Carrito con Contador -->
+                <a asp-controller="Carrito" asp-action="Index" class="btn btn-outline-light position-relative me-2" id="ver-carrito">
+                    <i class="fas fa-shopping-cart"></i>
+                    @if (ViewBag.TotalProductos != null && ViewBag.TotalProductos > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="contador-carrito">
+                            @ViewBag.TotalProductos
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="contador-carrito" style="display: none;">
+                            0
+                        </span>
+                    }
+                </a>
+
+                <!-- Barra de Búsqueda (Opcional) -->
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - SistemaVentas - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

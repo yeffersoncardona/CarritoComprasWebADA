@@ -1,0 +1,68 @@
+﻿@model WebCarritoComprasAda.Models.Producto
+
+@{
+    ViewData["Title"] = "Agregar Producto";
+}
+
+<h2>Agregar Producto</h2>
+
+@* <form asp-action="Create" method="post"> *@
+    <div class="form-group">
+        <label asp-for="Nombre" class="control-label"></label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Descripcion" class="control-label"></label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Precio" class="control-label"></label>
+        <input asp-for="Precio" class="form-control" />
+        <span asp-validation-for="Precio" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Stock" class="control-label"></label>
+        <input asp-for="Stock" class="form-control" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-3">
+        <button type="button" id="btnAgregarProducto" class="btn btn-primary">Agregar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+@* </form> *@
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnAgregarProducto").click(function () {
+            var producto = {
+                Nombre: $("#Nombre").val(),
+                Descripcion: $("#Descripcion").val(),
+                Precio: parseFloat($("#Precio").val()) || 0,
+                Stock: parseInt($("#Stock").val()) || 0
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Producto/AgregarProducto",
+                data: JSON.stringify(producto),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        alert("Producto agregado exitosamente.");
+                        window.location.href = "/Producto/Index"; // Redirigir después de éxito
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Error al agregar el producto.");
+                }
+            });
+        });
+    });
+</script>

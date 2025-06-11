@@ -1,0 +1,85 @@
+﻿@model IEnumerable<WebCarritoComprasAda.Models.Producto>
+
+    @{
+        ViewData["Title"] = "Productos";
+    }
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <div class="p-3">
+        <div class="container p-3 text-center text-uppercase bg-black text-white">
+            <h2>Productos Disponibles</h2>
+        </div>
+    </div>
+
+    @* <div class="container p-3 text-center">
+    <a asp-controller="Carrito" asp-action="Index" class="btn btn-success" id="ver-carrito">
+        <i class="fa-solid fa-cart-shopping"></i>
+        Ver Carrito
+        @if (ViewBag.TotalProductos != null && ViewBag.TotalProductos > 0)
+        {
+            <span class="badge bg-danger" id="contador-carrito">@ViewBag.TotalProductos</span>
+        }
+        else
+        {
+            <span class="badge bg-danger" id="contador-carrito" style="display: none;">0</span>
+        }
+    </a>
+</div> *@
+
+    <div class="row p-3">
+        @foreach (var producto in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@producto?.Nombre</h5>
+                        <p class="card-text">@producto?.Descripcion</p>
+                        <p class="card-text"><strong>Precio:</strong> @producto?.Precio.ToString("C")</p>
+                        <p class="card-text"><strong>Stock:</strong> @producto?.Stock</p>
+                        <form class="agregar-carrito-form" data-producto-id="@producto?.ProductoId">
+                            <div class="form-group">
+                                <label for="cantidad">Cantidad:</label>
+                                <input type="number" name="cantidad" value="1" min="1" max="@producto?.Stock" class="form-control cantidad" />
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                Agregar al Carrito
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                $(".agregar-carrito-form").on("submit", function (e) {
+                    e.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+
+                    var form = $(this);
+                    var productoId = form.data("producto-id");
+                    var cantidad = form.find(".cantidad").val();
+
+                    $.ajax({
+                    url: "@Url.Action("AgregarAlCarritoAjax", "Carrito")",
+                        type: "POST",
+                        data: { productoId: productoId, cantidad: cantidad },
+                        success: function (response) {
+                            if (response.success) {
+                                // Actualizar el contador del carrito
+                                $("#contador-carrito").text(response.totalProductos).show();
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert("Ocurrió un error al agregar el producto al carrito.");
+                        }
+                    });
+                });
+            });
+        </script>
+    }
