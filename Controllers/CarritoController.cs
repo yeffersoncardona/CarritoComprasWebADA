@@ -7,18 +7,22 @@ namespace WebCarritoComprasAda.Controllers
     public class CarritoController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private int _usuarioId;
         public CarritoController(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _usuarioId = Convert.ToInt32(_context.Usuarios.FirstOrDefault(x => x.Rol == "REGULAR"));
         }
         public IActionResult Index()
         {
+            var Usuario = _context.Usuarios.Where( x => x.Rol =="REGULAR").FirstOrDefault();
             var carritoItems = _context.CarritoItems.Include(ci => ci.Producto).ToList();
 
             int totalItems = carritoItems.Sum(ci => ci.Cantidad);
 
             ViewBag.TotalItems = totalItems;
-           
+            ViewBag.UsuarioId = Usuario.Id;
+
             return View(carritoItems);
         }
         [HttpPost]
@@ -40,7 +44,8 @@ namespace WebCarritoComprasAda.Controllers
                 {
                     ProductoId = productoId,
                     Cantidad = cantidad,
-                   
+                    UsuarioId = _usuarioId
+
                 };
                 _context.CarritoItems.Add(carritoItem);
             }
