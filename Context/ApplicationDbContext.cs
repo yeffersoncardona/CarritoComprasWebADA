@@ -9,5 +9,6 @@ namespace WebCarritoComprasAda.Context
         }
         public DbSet<Models.Producto> Productos { get; set; }
         public DbSet<Models.CarritoItem> CarritoItems { get; set; }
+        public DbSet<Models.Transacciones> Transacciones { get; set; }
     }
 }
