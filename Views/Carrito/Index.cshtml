@@ -46,7 +46,11 @@
     </div>
 
     <a asp-controller="Producto" asp-action="Index" class="btn btn-primary">Seguir Comprando</a>
-    <button id="btnFinalizarCompra" class="btn btn-success">Finalizar Compra</button>
+    
+    <form asp-controller="Carrito" asp-action="RegistrarCompra" method="post">
+        <button type="submit" class="btn btn-success">Finalizar Compra</button>
+    </form>
+   
 }
 else
 {
@@ -55,46 +59,5 @@ else
     </div>
     <a asp-controller="Producto" asp-action="Index" class="btn btn-primary">Ir a Productos</a>
 }
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        $("#btnFinalizarCompra").click(function () {
-            var usuarioId = @ViewBag.UsuarioId; // ID del usuario en sesión
-            var carritoItems = [];
-
-            $(".carrito-item").each(function () {
-                carritoItems.push({
-                    ProductoId: $(this).data("producto-id"),
-                    CantidadComprada: parseInt($(this).find(".cantidad").text()) || 1
-                });
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/api/transacciones/registrar",
-                data: JSON.stringify({ UsuarioId: usuarioId, Items: carritoItems }),
-                contentType: "application/json",
-                dataType: "json",
-                success: function (response) {
-                    Swal.fire({
-                        title: "¡Compra realizada!",
-                        text: response.message,
-                        icon: "success",
-                        confirmButtonText: "OK"
-                    });
-
-                    $(".carrito-item").remove(); // Limpiar carrito en frontend
-                },
-                error: function (xhr) {
-                    Swal.fire({
-                        title: "Error",
-                        text: xhr.responseJSON.message,
-                        icon: "error"
-                    });
-                }
-            });
-        });
-    });
-</script>
 
