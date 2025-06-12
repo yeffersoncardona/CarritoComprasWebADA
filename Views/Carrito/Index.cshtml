@@ -3,7 +3,15 @@
 @{
     ViewData["Title"] = "Carrito de Compras";
 }
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
 <h2>Carrito de Compras</h2>
 
     @if (Model != null && Model.Any())
